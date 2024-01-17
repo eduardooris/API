@@ -20,13 +20,13 @@ app.use("/services", serviceRoutes);
 
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD);
-
+const port = process.env.PORT ?? 3000;
 mongoose
   .connect(
     `mongodb+srv://${DB_USER}:${DB_PASSWORD}@consruwise.n7x9yo3.mongodb.net/?retryWrites=true&w=majority`
   )
   .then(() => {
     console.log("Connected");
-    app.listen(3000);
+    app.listen(port);
   })
   .catch((err) => console.log(err));
