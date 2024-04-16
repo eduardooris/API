@@ -10,10 +10,10 @@ const registerUser = async (req, res) => {
     return res.status(422).json({ message: "Dados incompletos!" });
   }
 
-  const userExists = await User.findOne({ email: email });
+  const userExists = await User.findOne({ email: email, user: user });
 
   if (userExists) {
-    return res.status(422).json({ message: "Email inválido" });
+    return res.status(422).json({ message: "Email ou usuário inválido" });
   }
 
   const salt = await bcrypt.genSalt(12);
@@ -28,7 +28,26 @@ const registerUser = async (req, res) => {
 
   try {
     await newUser.save();
-    res.status(200).json({ message: "Usuário criado com sucesso!" });
+
+    const secret = process.env.SECRET;
+
+    const token = jwt.sign(
+      {
+        id: newUser.id,
+      },
+      secret
+    );
+    const currentUser = {
+      email: newUser.email,
+      user: newUser.user,
+      password: newUser.password,
+      name: newUser.name,
+      id: newUser.id,
+      token,
+    };
+    res
+      .status(200)
+      .json({ message: "Usuário criado com sucesso!", user: currentUser });
   } catch (error) {
     res.status(500).json({ status: false });
   }

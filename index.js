@@ -25,7 +25,7 @@ mongoose
     `mongodb+srv://${DB_USER}:${DB_PASSWORD}@consruwise.n7x9yo3.mongodb.net/?retryWrites=true&w=majority`
   )
   .then(() => {
-    console.log("Connected");
+    console.log(`Connected in port -- ${port}`);
     app.listen(port);
   })
   .catch((err) => console.log(err));
